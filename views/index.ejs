@@ -2,11 +2,63 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/css/base.css' />
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
 
+      $(function () {
+          console.log('Hello from jquery ... ');
+
+          $('button.create-contact').click(function () {
+              var form = document.forms.contact;
+              var person = {
+                  name: form.name,
+                  email: form.email,
+                  tel: form.tel
+              };
+              console.log(person);
+
+              var xhr = new XMLHttpRequest();
+              xhr.open('post', '/contacts');
+              xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.addEventListener('readystatechange', function () {
+                  if (xhr.readyState === 4) {
+                      if (xhr.status === 200) {
+                          console.log(xhr.responseText);
+                      } else {
+                          console.log(xhr);
+                      }
+                  }
+              });
+              xhr.send(JSON.stringify(person));
+          });
+
+
+      });
+
+
+
+    </script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <section class="panel">
+      <header>
+        <h2>Create a Contact</h2>
+      </header>
+      <div>
+          <form name="contact">
+              <input type="text" placeholder="name" name="name"/>
+              <input type="email" placeholder="email" name="email"/>
+              <input type="tel" placeholder="tel" name="tel"/>
+          </form>
+        <button class="create-contact">Create Contact</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <h2>List All Contacts</h2>
+        </header>
+    </section>
   </body>
 </html>

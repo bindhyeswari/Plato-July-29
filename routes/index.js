@@ -2,6 +2,8 @@ var express = require('express');
 var path = require('path');
 var router = express.Router();
 
+var contacts = [];
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -29,6 +31,11 @@ router.get('/candidates', function (req, res) {
 router.post('/response', function (req, res) {
   console.log(req.body);
   res.status(200).json({obj: req.body});
+});
+
+router.post('/contacts', function (req, res) {
+    contacts.push(req.body);
+    res.status(200).json({ message: 'Successfully inserted the contact.' });
 });
 
 module.exports = router;
