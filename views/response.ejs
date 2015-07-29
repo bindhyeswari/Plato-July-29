@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/base.css"/>
+    <script>
+
+        function getRequest() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', '/candidates');
+            xhr.addEventListener('readystatechange', function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log(JSON.parse(xhr.responseText));
+                    } else {
+                        console.log(xhr.status);
+                    }
+                }
+            });
+            xhr.send();
+        }
+
+        function postRequest() {
+
+            var person = {
+                name: 'Likhita',
+                id: 200
+            };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', '/candidates');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.addEventListener('readystatechange', function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log(JSON.parse(xhr.responseText));
+                    } else {
+                        console.log(xhr.status);
+                    }
+                }
+            });
+            xhr.send(JSON.stringify(person));
+        }
+
+    </script>
+</head>
+<body>
+    <h1>This is an html file</h1>
+    <section>
+        <header>
+            <h2>Dynamic Content</h2>
+        </header>
+        <div>
+            <%= message %>
+        </div>
+    </section>
+</body>
+</html>
