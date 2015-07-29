@@ -3,7 +3,7 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/css/base.css' />
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
     <script>
 
       $(function () {
@@ -12,25 +12,30 @@
           $('button.create-contact').click(function () {
               var form = document.forms.contact;
               var person = {
-                  name: form.name,
-                  email: form.email,
-                  tel: form.tel
+                  name: form.name.value,
+                  email: form.email.value,
+                  tel: form.tel.value
               };
               console.log(person);
 
-              var xhr = new XMLHttpRequest();
-              xhr.open('post', '/contacts');
-              xhr.setRequestHeader('Content-Type', 'application/json');
-              xhr.addEventListener('readystatechange', function () {
-                  if (xhr.readyState === 4) {
-                      if (xhr.status === 200) {
-                          console.log(xhr.responseText);
-                      } else {
-                          console.log(xhr);
-                      }
-                  }
+              $.post('/contacts', person, function (data) {
+                  console.log(data);
               });
-              xhr.send(JSON.stringify(person));
+
+          });
+
+          $('button.list-contacts').click(function () {
+              $.getJSON('/contacts', function (data) {
+                  console.log(data);
+
+                  var ul = $('ul#contacts');
+                  ul.html('');
+                  data.forEach(function (contact) {
+                      console.log(contact);
+                      $('<li>').html(contact.name + ', ' + contact.email + ', ' + contact.tel).appendTo(ul);
+                  });
+
+              });
           });
 
 
@@ -56,9 +61,12 @@
     </section>
 
     <section class="panel">
-      <header>
-        <h2>List All Contacts</h2>
+        <header>
+            <h2>List All Contacts</h2>
         </header>
+        <button class="list-contacts">List Contacts</button>
+        <ul id="contacts">
+        </ul>
     </section>
   </body>
 </html>

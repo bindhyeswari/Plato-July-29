@@ -38,4 +38,8 @@ router.post('/contacts', function (req, res) {
     res.status(200).json({ message: 'Successfully inserted the contact.' });
 });
 
+router.get('/contacts', function (req, res) {
+   res.status(200).json(contacts);
+});
+
 module.exports = router;
