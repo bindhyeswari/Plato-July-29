@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+var uuid = require('uuid');
 var router = express.Router();
 
 var contacts = [];
@@ -34,12 +35,21 @@ router.post('/response', function (req, res) {
 });
 
 router.post('/contacts', function (req, res) {
+    req.body.uuid = uuid.v4();
     contacts.push(req.body);
     res.status(200).json({ message: 'Successfully inserted the contact.' });
 });
 
 router.get('/contacts', function (req, res) {
    res.status(200).json(contacts);
+});
+
+router.put('/contacts', function (req, res) {
+    console.log(contacts.map(function (contact) {return contact.uuid}));
+    console.log(req.body);
+    console.log(contacts.map(function (contact) {return contact.uuid}).indexOf(req.body.uuid));
+    contacts[contacts.map(function (contact) {return contact.uuid}).indexOf(req.body.uuid)] = req.body;
+    res.status(200).json({message: 'IMPL_101'});
 });
 
 module.exports = router;

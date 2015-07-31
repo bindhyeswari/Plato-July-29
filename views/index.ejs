@@ -4,6 +4,16 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/css/base.css' />
     <script src="bower_components/jquery/dist/jquery.js"></script>
+      <style>
+
+          .name, .email, .tel {
+              border: 1px solid gray;
+              padding: 0.35em 0.5em;
+              margin: 0.5em;
+              display: inline-block;
+          }
+
+      </style>
     <script>
 
       $(function () {
@@ -32,7 +42,51 @@
                   ul.html('');
                   data.forEach(function (contact) {
                       console.log(contact);
-                      $('<li>').html(contact.name + ', ' + contact.email + ', ' + contact.tel).appendTo(ul);
+                      var li = $('<li>').appendTo(ul);
+                      $('<span>').addClass('name').html(contact.name).appendTo(li);
+                      $('<span>').addClass('email').html(contact.email).appendTo(li);
+                      $('<span>').addClass('tel').html(contact.tel).appendTo(li);
+                      $('<span>').addClass('uuid').html(contact.uuid).appendTo(li);
+                      $('<button>').addClass('edit').appendTo(li).html('Edit').click(function () {
+                          $(this).parent().children('span').each(function () {
+                              $(this).attr('contenteditable', 'true');
+                          });
+                          $(this).parent().children('.update').toggle();
+                      });
+                      $('<button>').addClass('update').appendTo(li).html('Save').hide().click(function () {
+                          var jsonObject = {};
+                          $(this).parent().children('span').each(function () {
+                              jsonObject[this.className] = this.innerHTML;
+                          });
+
+                          /* jquery ajax version */
+                          $.ajax({
+                              method: 'put',
+                              data: JSON.stringify(jsonObject),
+                              contentType: 'application/json',
+                              url: '/contacts',
+                              success: function () {
+                                  console.log('call was successful', arguments);
+                              }
+                          });
+
+                          /* delete --> dont need a body, change the method to 'delete' */
+
+                          /* xmlhttprequest version */
+                         /* var xhr = new XMLHttpRequest();
+                          xhr.open('put', '/contacts');
+                          xhr.setRequestHeader('Content-Type', 'application/json');
+                          xhr.addEventListener('readystatechange', function () {
+                              if (xhr.readyState === 4) {
+                                  if (xhr.status === 200) {
+                                      console.log(xhr.responseText);
+                                  } else {
+
+                                  }
+                              }
+                          });
+                          xhr.send(JSON.stringify(jsonObject));*/
+                      });
                   });
 
               });
